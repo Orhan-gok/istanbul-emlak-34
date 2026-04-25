@@ -3,8 +3,10 @@ document.querySelectorAll(".card").forEach(function(card) {
   const thumbnails = card.querySelectorAll(".gallery img");
   const prevBtn = card.querySelector(".prev");
   const nextBtn = card.querySelector(".next");
+  const slider = card.querySelector(".slider");
 
   let currentIndex = 0;
+  let startX = 0;
 
   function showImage(index) {
     if (!mainImg || thumbnails.length === 0) return;
@@ -35,6 +37,25 @@ document.querySelectorAll(".card").forEach(function(card) {
   if (nextBtn) {
     nextBtn.addEventListener("click", function() {
       showImage(currentIndex + 1);
+    });
+  }
+
+  if (slider) {
+    slider.addEventListener("touchstart", function(e) {
+      startX = e.touches[0].clientX;
+    });
+
+    slider.addEventListener("touchend", function(e) {
+      let endX = e.changedTouches[0].clientX;
+      let difference = startX - endX;
+
+      if (difference > 50) {
+        showImage(currentIndex + 1);
+      }
+
+      if (difference < -50) {
+        showImage(currentIndex - 1);
+      }
     });
   }
 });
